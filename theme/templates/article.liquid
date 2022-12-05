@@ -1,0 +1,20 @@
+<div class="template-article">
+  <div class="container">
+    <div class="card">
+
+      {% render 'image' class: 'template-article__image card-img-top', image: article.image, width: 1024, height: 1024 %}
+
+      <div class="card-body">
+        <h1 class="card-title fs-2">{{ article.title | escape }}</h1>
+
+        <h6 class="card-subtitle mb-3 text-muted">
+          Published at
+          {{ article.published_at | date: format: 'abbreviated_date' }}
+        </h6>
+
+        <div class="card-text">{{ article.content }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.template-article -->

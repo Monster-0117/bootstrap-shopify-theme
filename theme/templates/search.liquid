@@ -1,0 +1,60 @@
+{% render 'page-header' title: 'Search' %}
+
+<div class="template-search">
+  <div class="container">
+
+    <form action="/search" class="template-search__form mb-4">
+      <div class="input-group mb-2">
+        <input class="template-search__form-input form-control" type="text" name="q" value="{{ search.terms | escape }}" autocomplete="off">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </div>
+
+      <ul class="template-search__form-results list-group"></ul>
+    </form>
+
+    {% if search.results_count == 0 %}
+      <p>
+        There are no results for
+        <b>{{ search.terms | escape }}</b>. Try checking your spelling or using different words.
+      </p>
+    {% endif %}
+
+    {% paginate search.results by 10 %}
+      <div class="template-search__results mb-4">
+        {% for item in search.results %}
+          <div class="template-search__card card mb-3 overflow-hidden">
+            <div class="template-search__card-image">
+              <a href="{{ item.url }}">
+                {% if item.object_type == 'article' or  item.object_type == 'page' %}
+                  {% render 'image' image: item.image, alt: item.title, width: 300, height: 300 %}
+                {% else %}
+                  {% render 'image' image: item.featured_image, alt: item.title, width: 300, height: 300 %}
+                {% endif %}
+              </a>
+            </div>
+
+            <div class="template-search__card-body card-body">
+              <h5 class="card-title">
+                <a class="text-decoration-none" href="{{ item.url }}">{{ item.title }}</a>
+              </h5>
+              <h6 class="text-danger">
+                {%- if item.price_varies -%}
+                  <span>Starting at</span>
+                  {{ item.price_min | money_without_trailing_zeros }}
+                  <span aria-hidden="true">+</span>
+                {%- else -%}
+                  {{ item.price | money_without_trailing_zeros }}
+                {%- endif -%}
+              </h6>
+              <div class="card-text">{{ item.content | strip_html | truncate: 100 | highlight: search.terms }}</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% render 'pagination' paginate: paginate %}
+    {% endpaginate %}
+
+  </div>
+</div>
+<!-- /.template-search --> 

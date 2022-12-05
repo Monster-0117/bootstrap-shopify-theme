@@ -1,0 +1,108 @@
+{
+  "name": "bootstrap-shopify-theme",
+  "version": "3.0.0",
+  "author": "Vien Dinh <maxvien@gmail.com>",
+  "repository": "maxvien/bootstrap-shopify-theme",
+  "license": "MIT",
+  "scripts": {
+    "serve": "run-p serve:*",
+    "serve:build": "encore dev --watch",
+    "serve:theme": "cd theme && shopify theme serve",
+    "pull": "run-s -c pull:before pull:theme pull:after",
+    "pull:before": "git add .",
+    "pull:theme": "cd theme && shopify theme pull -n",
+    "pull:after": "git clean -xdf theme/assets",
+    "push": "run-s push:build push:theme",
+    "push:build": "encore production",
+    "push:theme": "cd theme && shopify theme push",
+    "test": "jest",
+    "lint": "run-s lint:*",
+    "lint:theme": "shopify theme check",
+    "lint:scripts": "eslint src/**/*.js",
+    "lint:styles": "stylelint src/**/*.{css,scss}",
+    "lint:format": "prettier --check .",
+    "fix": "run-s -c fix:*",
+    "fix:theme": "shopify theme check -a",
+    "fix:scripts": "eslint --fix src/**/*.js",
+    "fix:styles": "stylelint --fix src/**/*.{css,scss}",
+    "fix:format": "prettier --write ."
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.9.2",
+    "@shopify/theme-addresses": "^4.1.1",
+    "@shopify/theme-predictive-search": "^4.1.1",
+    "@shopify/theme-product": "^4.1.0",
+    "@shopify/theme-product-form": "^4.1.1",
+    "bootstrap": "^5.0.2",
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.21",
+    "smartmenus": "^1.1.1",
+    "smartmenus-bootstrap-4": "^0.1.0",
+    "swiper": "^6.8.0",
+    "with-elements": "^1.0.0"
+  },
+  "devDependencies": {
+    "@namics/stylelint-bem": "^6.3.4",
+    "@symfony/webpack-encore": "^1.5.0",
+    "core-js": "^3.16.1",
+    "eslint": "^7.32.0",
+    "jest": "^27.0.6",
+    "npm-run-all": "^4.1.5",
+    "postcss-loader": "^5.0.0",
+    "postcss-preset-env": "^6.7.0",
+    "prettier": "^2.3.2",
+    "sass": "^1.37.5",
+    "sass-loader": "^12.0.0",
+    "stylelint": "^13.13.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "semi": true,
+    "printWidth": 120,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended"
+    ],
+    "env": {
+      "es6": true,
+      "jest": true,
+      "node": true,
+      "browser": true
+    },
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": "latest"
+    }
+  },
+  "stylelint": {
+    "plugins": [
+      "@namics/stylelint-bem"
+    ],
+    "rules": {
+      "max-nesting-depth": 2,
+      "plugin/stylelint-bem-namics": {
+        "patternPrefixes": [
+          "layout",
+          "snippet",
+          "section",
+          "template"
+        ]
+      }
+    }
+  }
+}

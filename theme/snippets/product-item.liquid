@@ -1,0 +1,24 @@
+<div class="snippet-product-item card">
+
+  {% render 'image' class: 'snippet-product-item__image card-img-top', image: product.featured_image, alt: product.title, width: 450, height: 450 %}
+
+  <div class="snippet-product-item__card-body card-body">
+    <div class="snippet-product-item__card-info">
+      <h5 class="card-title">{{ product.title }}</h5>
+      <p class="card-text">{{ product.description | strip_html | truncate: 50 }}</p>
+
+    </div>
+    <h6 class="text-danger mb-3">
+      {%- if product.price_varies -%}
+        <span>Starting at</span>
+        {{ product.price_min | money_without_trailing_zeros }}
+        <span aria-hidden="true">+</span>
+      {%- else -%}
+        {{ product.price | money_without_trailing_zeros }}
+      {%- endif -%}
+    </h6>
+
+    <a class="btn btn-primary btn-block" href="{{ product.url | within: collection }}">View</a>
+  </div>
+</div>
+<!-- /.snippet-product-item -->

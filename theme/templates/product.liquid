@@ -1,0 +1,140 @@
+<div class="template-product">
+  <div class="container">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12 col-lg-6 mb-3">
+            <div class="template-product__slider swiper-container">
+              <div class="swiper-wrapper">
+                {% for media in product.media %}
+                  <div class="template-product__slider-slide swiper-slide" data-media-id="{{media.id}}">
+                    {% case media.media_type %}
+                      {% when 'image' %}
+                        {% render 'image' image: media, width: 450, height: 450 %}
+                      {% when 'external_video' %}
+                        {{ media | external_video_tag }}
+                      {% when 'video' %}
+                        {{ media | video_tag: controls: true }}
+                      {% when 'model' %}
+                        {{ media | model_viewer_tag }}
+                      {% else %}
+                        {{ media | media_tag }}
+                    {% endcase %}
+                  </div>
+                {% endfor %}
+              </div>
+
+              {% if product.media.size > 1 %}
+                <button class="carousel-control-prev" type="button">
+                  <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button">
+                  <span aria-hidden="true" class="carousel-control-next-icon"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="col-md-12 col-lg-6 mb-3">
+
+            {% form 'product', product, class: 'template-product__form', data-product-handle: product.handle %}
+
+              <h1 class="mb-3">{{ product.title }}</h1>
+
+              <div class="mb-3">{{ product.description | strip_html }}</div>
+
+              <h3 class="mb-3 text-danger">{{ product.price | money}}</h3>
+
+              <noscript>
+                <div class="mb-3">
+                  <label class="form-label" for="product-form-variants">Variants</label>
+                  <select class="form-select" id="product-form-variants" name="id">
+                    {% for variant in product.variants %}
+                      <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} {% unless variant.available %} disabled="disabled" {% endunless %} value="{{ variant.id }}">
+                        {{ variant.title }}
+                        -
+                        {{ variant.price | money }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </noscript>
+
+              {% if product.has_only_default_variant %}
+                <input name="id" value="{{ product.first_available_variant.id }}" type="hidden">
+              {% else %}
+                {% for option in product.options_with_values %}
+                  <div class="template-product__form-option js-enabled mb-3">
+                    <label class="form-label" for="product-form-option-{{ option.position }}">
+                      {{ option.name }}
+                    </label>
+                    <select class="form-select" id="product-form-option-{{ option.position }}" name="options[{{ option.name | escape }}]" {% if option.position != 1 %} disabled {% endif %}>
+                      <option disabled selected value>
+                        {{ option.name | escape | prepend: 'Select ' }}
+                      </option>
+
+                      {% for value in option.values %}
+                        <option value="{{ value | escape }}">
+                          {{ value }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                {% endfor %}
+              {% endif %}
+
+
+              <div class="mb-4">
+                <label class="form-label" for="product-form-quantity">Quantity</label>
+                <input class="form-control" id="product-form-quantity" min="1" name="quantity" type="number" value="1">
+              </div>
+
+              <button class="btn btn-primary btn-lg mb-2" type="submit">Add to Cart</button>
+
+            {% endform %}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button aria-controls="home" aria-selected="true" class="nav-link active" data-bs-target="#product-description-tab" data-bs-toggle="tab" role="tab" type="button">Description</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button aria-controls="profile" aria-selected="false" class="nav-link" data-bs-target="#product-details-tab" data-bs-toggle="tab" role="tab" type="button">Details</button>
+              </li>
+            </ul>
+            <div class="tab-content pt-3">
+              <div aria-labelledby="product-description-tab" class="tab-pane fade show active" id="product-description-tab" role="tabpanel">
+                {{ product.content }}
+              </div>
+
+              <div aria-labelledby="product-details-tab" class="tab-pane fade" id="product-details-tab" role="tabpanel">
+                {% if product.metafields.details != blank %}
+                  <table class="table table-bordered">
+                    {% if product.metafields.details.material != blank %}
+                      <tr>
+                        <td width="100">Material</td>
+                        <td>{{ product.metafields.details.material }}</td>
+                      </tr>
+                    {% endif %}
+                    {% if product.metafields.details.weight != blank %}
+                      <tr>
+                        <td width="100">Weight</td>
+                        <td>{{ product.metafields.details.weight }}</td>
+                      </tr>
+                    {% endif %}
+                  </table>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.template-product -->

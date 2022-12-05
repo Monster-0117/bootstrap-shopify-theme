@@ -1,0 +1,21 @@
+<div class="snippet-collection-item card">
+
+  {% if collection.image %}
+    {% render 'image' class: 'snippet-collection-item__image card-img-top', image: collection.image, width: 450, height: 450 %}
+  {% else %}
+    {% render 'image' class: 'snippet-collection-item__image card-img-top', image: collection.products.first.featured_image, alt: collection.title, width: 450, height: 450 %}
+  {% endif %}
+
+  <div class="snippet-collection-item__card-body card-body">
+    <div class="snippet-collection-item__card-info">
+      <h5 class="card-title">{{ collection.title }}</h5>
+      <p class="card-text">{{ collection.description | strip_html | truncate: 100 }}</p>
+    </div>
+    <a class="btn btn-primary btn-block" href="{{ collection.url }}">
+      Explore
+      {{ collection.products_count }}
+      {{ collection.products_count | pluralize: 'Product', 'Products' }}
+    </a>
+  </div>
+</div>
+<!-- /.snippet-collection-item -->

@@ -1,0 +1,88 @@
+<nav class="snippet-main-menu navbar navbar-expand-lg navbar-dark fixed-top bg-dark shadow">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="{{ routes.root_url }}">{{ shop.name }}</a>
+
+    <a class="nav-link d-md-block d-lg-none ms-auto {% if request.path == routes.cart_url %}text-secondary{% else %}text-white{% endif %}" href="/cart">
+      Cart
+      {% if cart.item_count > 0 %}
+        <sup class="badge rounded-pill bg-danger">{{ cart.item_count }}</sup>
+      {% endif %}
+    </a>
+
+    <button aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarCollapse" data-bs-toggle="collapse" type="button">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <br>
+      <ul class="nav navbar-nav ms-auto">
+        {% for link in linklists.main-menu.links %}
+          {%- if link.links == blank -%}
+            <li class="nav-item">
+              <a class="nav-link {% if link.active %}text-secondary{% else %}text-white{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% else %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle {% if link.child_active %}text-secondary{% else %}text-white{% endif %}" href="{{ link.url }}">
+                {{ link.title }}
+              </a>
+              <ul class="dropdown-menu">
+                {%- for child_link in link.links -%}
+                  {%- if child_link.links == blank -%}
+                    <li>
+                      <a class="dropdown-item {% if child_link.active %}active{% endif %}" href="{{ child_link.url }}">
+                        {{ child_link.title }}
+                      </a>
+                    </li>
+                  {% else %}
+                    <li class="dropdown">
+                      <a class="dropdown-item dropdown-toggle {% if link.child_active %}active{% endif %}" href="{{ child_link.url }}">
+                        {{ child_link.title }}
+                      </a>
+                      <ul class="dropdown-menu">
+                        {%- for grandchild_link in child_link.links -%}
+                          <li>
+                            <a class="dropdown-item {% if grandchild_link.active %}active{% endif %}" href="{{ grandchild_link.url }}">{{ grandchild_link.title }}</a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </li>
+          {%- endif -%}
+        {% endfor %}
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link text-secondary">|</a>
+        </li>
+        {%- if shop.customer_accounts_enabled -%}
+          {%- if customer -%}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == routes.account_url %}text-secondary{% else %}text-white{% endif %}" href="/account">Account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == routes.account_logout_url %}text-secondary{% else %}text-white{% endif %}" href="/account/logout">Logout</a>
+            </li>
+          {%- else -%}
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == routes.account_login_url %}text-secondary{% else %}text-white{% endif %}" href="/account/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if request.path == routes.account_register_url %}text-secondary{% else %}text-white{% endif %}" href="/account/register">Register</a>
+            </li>
+          {%- endif -%}
+        {%- endif -%}
+        <li class="nav-item d-none d-lg-block">
+          <a class="nav-link {% if request.path == routes.cart_url %}text-secondary{% else %}text-white{% endif %}" href="/cart">
+            Cart
+            {% if cart.item_count > 0 %}
+              <sup class="badge rounded-pill bg-danger">{{ cart.item_count }}</sup>
+            {% endif %}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- /.snippet-main-menu -->

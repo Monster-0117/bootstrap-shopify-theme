@@ -1,0 +1,40 @@
+<div class="snippet-featured-slider card">
+  <h4 class="card-header">{{ section.settings.title }}</h4>
+
+  <div class="card-body carousel">
+    <div class="snippet-featured-slider__swiper swiper-container">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          {%- liquid
+            assign article = articles[block.settings[type]]
+            assign collection = collections[block.settings[type]]
+            assign product = all_products[block.settings[type]]
+          -%}
+
+          <div class="snippet-featured-slider__swiper-slide swiper-slide">
+            {%- liquid
+              case type
+                when 'article':
+                  render 'article-item' article: article
+                when 'collection':
+                  render 'collection-item' collection: collection
+                when 'product':
+                  render 'product-item' product: product
+              endcase
+            -%}
+          </div>
+        {% endfor %}
+      </div>
+
+      <button class="snippet-featured-slider__swiper-control carousel-control-prev" type="button">
+        <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="snippet-featured-slider__swiper-control carousel-control-next" type="button">
+        <span aria-hidden="true" class="carousel-control-next-icon"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- /.snippet-featured-slider -->

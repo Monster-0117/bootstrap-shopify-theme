@@ -1,0 +1,39 @@
+{% render 'page-header' title: page_title %}
+
+<div class="template-customer-addresses">
+  <div class="container">
+    <div class="row">
+      {% for address in customer.addresses %}
+        <div class="col-sm-4">
+          <div class="template-customer-addresses__card card">
+            <div class="template-customer-addresses__card-body card-body">
+              {% if address == customer.default_address %}
+                <h6 class="card-subtitle mb-2 text-muted">DEFAULT</h6>
+              {% endif %}
+
+              {{ address | format_address }}
+            </div>
+            <div class="card-footer">
+              <form action="/account/addresses/{{ address.id }}" method="post">
+                <input name="_method" type="hidden" value="delete"/>
+                <button class="btn btn-sm btn-primary me-2" data-bs-target="#modal-{{ address.id }}" data-bs-toggle="modal" type="button">
+                  Edit
+                </button>
+                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+              </form>
+
+              {% render 'address-form' address: address %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      <div class="col-sm-4">
+        <button class="btn btn-primary" data-bs-target="#modal-{{ customer.new_address.id }}" data-bs-toggle="modal" type="button">
+          Add Address
+        </button>
+        {% render 'address-form' address: customer.new_address %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.template-customer-addresses -->

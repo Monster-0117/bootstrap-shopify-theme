@@ -1,0 +1,17 @@
+{% render 'page-header' title: page_title %}
+
+<div class="template-blog">
+  <div class="container">
+    {%- paginate blog.articles by 12 -%}
+      <div class="row">
+        {%- for article in blog.articles -%}
+          <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+            {% render 'article-item' article: article %}
+          </div>
+        {% endfor %}
+      </div>
+      {% render 'pagination' paginate: paginate %}
+    {%- endpaginate -%}
+  </div>
+</div>
+<!-- /.template-blog -->

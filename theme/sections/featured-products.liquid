@@ -1,0 +1,37 @@
+{% render 'featured-slider' section: section, type: 'product' %}
+
+
+{% schema %}
+
+{
+  "name": "Featured Products",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title",
+      "default": "Featured Products"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "id": "product",
+          "type": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Sliders",
+      "name": "Featured Products"
+    }
+  ]
+}
+
+{% endschema %}
